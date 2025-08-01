@@ -63,7 +63,6 @@ function displayCharacter(event) {
                    materialNames[increment] = materials[j].name;
                    totals[increment] = materials[j].value;
                    increment++;
-                   //console.log(materialNames);
                }else {
                    for(let k = 0; k < materialNames.length; k++) {
                        if(materialNames[k] === materials[j].name) {
