@@ -40,9 +40,49 @@ function displayCharacter(event) {
     }).then((json) => {
         const section = document.createElement("section");
         const characterName = document.createElement("h2")
+        const paragraph = document.createElement("p");
+        const orderList = document.createElement("ul");
+        let levelsAPI = [json.ascension_materials.level_20, json.ascension_materials.level_40, json.ascension_materials.level_50, json.ascension_materials.level_60, json.ascension_materials.level_70, json.ascension_materials.level_80];
+        let totals = [];
+        let increment = 0;
+        let materialNames=[];
+
         characterName.textContent = json.name;
+        paragraph.textContent = "Nation: " + json.nation + " Vision: " + json.vision + " Weapon Type: " + json.weapon;
+
+        for(let i = 0; i < levelsAPI.length; i++) {
+            let materials = levelsAPI[i];
+            let levelTitles = ["Level 20", "Level 40", "Level 50", "Level 60", "Level 70", "Level 80"];
+            const levelTitleElement = document.createElement("h3");
+            levelTitleElement.textContent = levelTitles[i];
+            orderList.appendChild(levelTitleElement);
+           for (let j = 0; j < materials.length; j++) {
+               const list = document.createElement("li");
+               list.textContent = `Material: ${materials[j].name}\n Value: ${materials[j].value}`;
+               if(!materialNames.includes(materials[j].name)) {
+                   materialNames[increment] = materials[j].name;
+                   totals[increment] = materials[j].value;
+                   increment++;
+                   //console.log(materialNames);
+               }else {
+                   for(let k = 0; k < materialNames.length; k++) {
+                       if(materialNames[k] === materials[j].name) {
+                           totals[k] += materials[j].value;
+                       }
+                       console.log(totals);
+                   }
+
+               }
+               orderList.appendChild(list);
+           }
+        }
         section.appendChild(characterName);
+        section.appendChild(paragraph);
+        section.appendChild(orderList);
         characterDiv.appendChild(section);
-        console.log(json);
+        displayTotalMaterials(totals, materialNames);
     })
+}
+function displayTotalMaterials(totals, materials){
+
 }
