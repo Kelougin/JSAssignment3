@@ -42,6 +42,7 @@ function displayCharacterInformation(json){
     const characterName = document.createElement("h2") //Variable for creating h2
     const paragraph = document.createElement("p"); //Variable for creating paragraph
     const unorderList = document.createElement("ul"); //Variable for creating un ordered list
+    const button = document.createElement("button"); //Variable for creating un ordered list
     //Array for holding the level materials from the json
     let levelsAPI = [json.ascension_materials.level_20, json.ascension_materials.level_40, json.ascension_materials.level_50, json.ascension_materials.level_60, json.ascension_materials.level_70, json.ascension_materials.level_80];
     let totals = []; //Empty array for holding totals
@@ -50,6 +51,7 @@ function displayCharacterInformation(json){
 
     characterName.textContent = json.name; //Set h2 element text content
     paragraph.innerHTML = "<strong>Nation:</strong> " + json.nation + " <strong>Vision:</strong> " + json.vision + " <strong>Weapon Type:</strong> " + json.weapon; //Set inner html for paragraph element
+    button.textContent = "More information";
 
     for(let i = 0; i < levelsAPI.length; i++) { //Cycles through level api array
         let materials = levelsAPI[i]; //Variable for holding individual level value returned from json
@@ -80,6 +82,8 @@ function displayCharacterInformation(json){
     section.appendChild(unorderList); //Adds unordered list to section element
     characterDiv.appendChild(section); //Add section to the div
     displayTotalMaterials(totals, materialNames, section, unorderList); //Calls function to display materials
+    section.appendChild(button);
+    button.addEventListener("click", () => fetchBossMaterials(materialNames))
 }
 
 function displayTotalMaterials(totals, materials, section, unorderList) {
@@ -92,4 +96,47 @@ function displayTotalMaterials(totals, materials, section, unorderList) {
         unorderList.appendChild(list); //adds list to unordered list
     }
     section.appendChild(unorderList); //adds ul to section
+}
+
+function fetchBossMaterials(materialName) {
+    let url = `${baseURL}materials/boss-material`; //String for url for boss materials
+    let bossName; //Variable for bossName
+    let bossDrop; //Variable for boss drops
+    fetch(url) //fetch api from url
+        .then(response => {
+            return response.json(); //return response as json
+        }).then((json) => {
+            const bossMaterials = Object.values(json); //Store json as array
+        for(let i = 0; i < bossMaterials.length; i++) {  //cycle through array
+            if(materialName.includes(bossMaterials[i].name)) { //If materialName include the value of boss materials name
+                bossName = bossMaterials[i].source; //Set boss name
+                bossDrop = bossMaterials[i].name; //Set boss drop
+            }
+        }
+        //console.log(materialName);
+    })
+
+    let url2 = `${baseURL}materials/common-ascension` //String for url for common materials
+    let enemyName; //Variable for enemy name
+    let characterDrops = []; //Array for drop names
+    fetch(url2) //fetch api from url
+        .then(response => {
+            return response.json(); //return response as json
+        }).then((json) => {
+            const enemyMaterials = Object.values(json); //Store json as array
+            for(let i = 0; i < enemyMaterials.length - 1; i++) { //cycle through arrays
+              let itemArray = enemyMaterials[i].items //Store array in variable
+                for(let j = 0; j < itemArray.length; j++) { //cycle through arrays
+                    if(materialName.includes(itemArray[j].name)){ // if material name includes the value of item array name
+                        if(enemyName !== enemyMaterials[i].sources[0]) { //If enemy name is not already stored in array
+                            enemyName = enemyMaterials[i].sources[0] //Store enemy name in variable
+                        }
+                        characterDrops[j] = itemArray[j].name; //Store drops name in array
+                        //console.log(enemyName); debugging
+                    }
+                }
+            }
+        alert(`Farm ${bossName} to get ${bossDrop}\nFarm ${enemyName} to get ${characterDrops[0]}, ${characterDrops[1]}, ${characterDrops[2]}`); //Set alert for what to farm
+    })
+    //console.log(bossDrop); debugging
 }
