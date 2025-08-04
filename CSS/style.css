@@ -1,0 +1,38 @@
+body{
+    display: flex; /*Set body to flex*/
+    flex-direction: column; /*Set flex direction to column */
+    align-items: center; /* Align items to center */
+}
+li{
+    list-style: none; /* remove list style */
+    margin-top: 4px; /* Set margin top size */
+}
+h1{
+    font-size: 3.6rem; /* Set font size */
+    color: darkblue; /* Set h1 color */
+    margin-bottom: 15px; /* Set margin bottom size */
+}
+h2{
+    font-size: 2.4rem;  /* Set font size */
+    margin-bottom: 15px;  /* Set margin bottom size */
+}
+h3{
+    font-size: 1.8rem;  /* Set font size */
+    margin-bottom: 10px;  /* Set margin bottom size */
+}
+p, li, select, label{
+    font-size: 1.2rem;  /* Set font size */
+}
+p{
+    font-style: italic; /*Set font to italic */
+}
+label{
+    margin-bottom: 4px;  /* Set margin bottom size */
+}
+button {
+    font-size: 1rem;  /* Set font size */
+    margin-left: 100px;  /* Set margin left size */
+    border-radius: 10px; /* round edges for button */
+    font-weight: bold; /* Set font style */
+    padding: 10px; /* Set padding */
+}
