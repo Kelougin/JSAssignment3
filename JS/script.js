@@ -113,29 +113,32 @@ function fetchBossMaterials(materialName) {
                 bossDrop = bossMaterials[i].name; //Set boss drop
             }
         }
+        fetchEnemyMaterials(materialName,bossName, bossDrop); //Calls function
         //console.log(materialName);
     })
+}
 
-    let url2 = `${baseURL}materials/common-ascension` //String for url for common materials
+function fetchEnemyMaterials(materialName,bossName, bossDrop) {
+    let url = `${baseURL}materials/common-ascension` //String for url for common materials
     let enemyName; //Variable for enemy name
     let characterDrops = []; //Array for drop names
-    fetch(url2) //fetch api from url
+    fetch(url) //fetch api from url
         .then(response => {
             return response.json(); //return response as json
         }).then((json) => {
-            const enemyMaterials = Object.values(json); //Store json as array
-            for(let i = 0; i < enemyMaterials.length - 1; i++) { //cycle through arrays
-              let itemArray = enemyMaterials[i].items //Store array in variable
-                for(let j = 0; j < itemArray.length; j++) { //cycle through arrays
-                    if(materialName.includes(itemArray[j].name)){ // if material name includes the value of item array name
-                        if(enemyName !== enemyMaterials[i].sources[0]) { //If enemy name is not already stored in array
-                            enemyName = enemyMaterials[i].sources[0] //Store enemy name in variable
-                        }
-                        characterDrops[j] = itemArray[j].name; //Store drops name in array
-                        //console.log(enemyName); debugging
+        const enemyMaterials = Object.values(json); //Store json as array
+        for(let i = 0; i < enemyMaterials.length - 1; i++) { //cycle through arrays
+            let itemArray = enemyMaterials[i].items //Store array in variable
+            for(let j = 0; j < itemArray.length; j++) { //cycle through arrays
+                if(materialName.includes(itemArray[j].name)){ // if material name includes the value of item array name
+                    if(enemyName !== enemyMaterials[i].sources[0]) { //If enemy name is not already stored in array
+                        enemyName = enemyMaterials[i].sources[0] //Store enemy name in variable
                     }
+                    characterDrops[j] = itemArray[j].name; //Store drops name in array
+                    //console.log(enemyName); debugging
                 }
             }
+        }
         alert(`Farm ${bossName} to get ${bossDrop}\nFarm ${enemyName} to get ${characterDrops[0]}, ${characterDrops[1]}, ${characterDrops[2]}`); //Set alert for what to farm
     })
     //console.log(bossDrop); debugging
